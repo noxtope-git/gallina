@@ -17,7 +17,8 @@ from ultralytics import YOLO
 
 from src.vision import VisionController
 from src.logic import GameLogic
-from src.caja_negra import CajaNegra  
+from src.caja_negra import CajaNegra
+from src.botones import ButtonDetector
 
 pyautogui.FAILSAFE = False 
 pyautogui.PAUSE = 0.01
@@ -76,6 +77,8 @@ class AppUI:
             sys.exit(1)
         self.logic = GameLogic()
         self.caja_negra = CajaNegra(max_frames=8, ruta_base=RUTA_BASE)
+        self.detector = ButtonDetector(ruta_base=RUTA_BASE)
+        self.detector.calibrar()
         
         self.running = True
         self.auto_play = False
@@ -267,6 +270,9 @@ class AppUI:
                     if not self.solo_jugar:
                         self.caja_negra.registrar_frame(frame)
                     
+                    btn_apostar, btn_avanzar = self.detector.encontrar_botones()
+                    self.logic.actualizar_coordenadas(btn_apostar=btn_apostar, btn_avanzar=btn_avanzar)
+
                     chicken_pos, fire_pos, threat_pos, game_state = self.vision.get_object_positions(frame)
                     main_txt, sub_txt, main_col, sub_col, is_ready, click_x, click_y, _, _ = self.logic.analyze_situation(chicken_pos, fire_pos, threat_pos, game_state)
                     

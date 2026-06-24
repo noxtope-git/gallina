@@ -32,7 +32,13 @@ class GameLogic:
         
         self.ultimo_peligro_visto = "desconocido"
         self.ultima_x_gallina = None
-        self.x_inicial_gallina = None # <-- NUEVO: Punto de partida para medir distancias
+        self.x_inicial_gallina = None
+
+    def actualizar_coordenadas(self, btn_apostar=None, btn_avanzar=None):
+        if btn_apostar:
+            self.BTN_RETIRAR_X, self.BTN_RETIRAR_Y = btn_apostar
+        if btn_avanzar:
+            self.BTN_AVANZAR_X, self.BTN_AVANZAR_Y = btn_avanzar
 
     def resetear_pasos(self):
         self.pasos_dados = 0
